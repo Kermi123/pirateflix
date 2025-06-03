@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PirateFlix - Главная</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(90deg, #ff0066, #00ccff);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+        h1 {
+            margin: 0;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .search-bar {
+            margin: 20px auto;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            padding: 12px;
+            width: 70%;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-size: 1em;
+            background-color: #2c2c2c;
+            color: #fff;
+            outline: none;
+            transition: background-color 0.3s;
+        }
+        .search-bar input:focus {
+            background-color: #3c3c3c;
+        }
+        .search-bar button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .search-bar button:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .movie-card {
+            background-color: #2a2a2a;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);
+        }
+        .movie-card img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .movie-card h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #00ccff;
+            text-shadow: 0 0 5px #00ccff;
+        }
+        .movie-card p {
+            font-size: 0.9em;
+            color: #ccc;
+            line-height: 1.5;
+            margin: 0;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PirateFlix</h1>
+    </header>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Поиск фильмов...">
+        <button onclick="searchMovies()">Найти</button>
+    </div>
+    <div class="container">
+        <div class="movies-grid" id="moviesGrid">
+            <a href="site.html?id=1" class="movie-card">
+                <img src="https://s4.vcdn.biz/static/f/9760047691/image.jpg/pt/r375x0x4" alt="Обложка Раша Гудбай">
+                <h2>Раша Гудбай (2025)</h2>
+                <p>Драма, Комедия. История Риты, которая меняет свои взгляды после переезда в Ужгород.</p>
+            </a>
+            <a href="site.html?id=2" class="movie-card">
+                <img src="https://kinobar.net/uploads/posts/2025-05/1746125136-1843853791.webp" alt="Обложка Два холма">
+                <h2>Два холма (2022-2024)</h2>
+                <p>Комедия, Фантастика. Сериал о женском городе, куда попадает мужчина.</p>
+            </a>
+        </div>
+    </div>
+    <script>
+        function searchMovies() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const movieCards = document.querySelectorAll('.movie-card');
+            let found = false;
+
+            movieCards.forEach(card => {
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                if (query === '' || title.includes(query)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                alert('Фильм не найден! Попробуйте "Раша Гудбай" или "Два холма"');
+            }
+        }
+    </script>
+</body>
+</html>
