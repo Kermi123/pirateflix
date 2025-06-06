@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PirateFlix - Фильм</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -27,6 +28,36 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #fff;
+        }
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .auth-buttons button, .auth-buttons a, .auth-buttons span {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s;
+            text-decoration: none;
+        }
+        .auth-buttons span {
+            background: none;
+            cursor: default;
+        }
+        .auth-buttons a.username {
+            background-color: #00ccff;
+            cursor: pointer;
+        }
+        .auth-buttons button:hover, .auth-buttons a.username:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
         }
         .search-bar {
             margin: 20px auto;
@@ -63,14 +94,14 @@
             transform: scale(1.05);
         }
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
         }
         .movie-card {
             background-color: #2a2a2a;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -105,167 +136,216 @@
             color: #ff3366;
             text-shadow: 0 0 5px #ff3366;
         }
-        video {
+        .trailer-section {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .trailer-section h3 {
+            font-size: 1.5em;
+            color: #00ccff;
+            text-shadow: 0 0 5px #00ccff;
+            margin-bottom: 15px;
+        }
+        .trailer-section iframe {
             width: 100%;
             max-width: 800px;
+            height: 450px;
             border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 102, 153, 0.3);
+            animation: pink-glow 2s ease-in-out infinite alternate;
         }
-        .season-episode-selector {
-            margin-top: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+        @keyframes pink-glow {
+            from {
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 102, 153, 0.3);
+            }
+            to {
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 102, 153, 0.5);
+            }
         }
-        .season-episode-selector select {
-            padding: 10px;
+        .download-button {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
             border: none;
             border-radius: 8px;
-            background-color: #3c3c3c;
+            background: linear-gradient(45deg, #ff3366, #cc0052);
             color: #fff;
-            font-size: 1em;
+            font-size: 1.2em;
+            text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            text-align: center;
         }
-        .season-episode-selector select:focus {
-            background-color: #4c4c4c;
-            box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
-            outline: none;
+        .download-button:hover {
+            background: linear-gradient(45deg, #cc0052, #ff3366);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.7);
         }
-        .rating-section {
-            margin: 30px 0;
+        .user-interaction {
+            width: 100%;
+            max-width: 800px;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-top: 10px;
+        }
+        .rating-section {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
         }
         .star-rating-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 5px;
+            width: 100%;
         }
         .star-rating {
             display: flex;
             gap: 5px;
+            justify-content: center;
         }
-        .star-rating span {
-            font-size: 2.5em;
+        .star-rating .star {
+            font-size: 2em;
             cursor: pointer;
             color: #888;
-            transition: color 0.5s ease, text-shadow 0.5s ease;
-            width: 30px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            width: 25px;
             text-align: center;
         }
-        .star-rating span:hover,
-        .star-rating span.active {
+        .star-rating .star.filled {
             color: #ffd700;
-            text-shadow: 0 0 15px #ffd700, 0 0 30px #ffcc00;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffcc00;
         }
-        .star-rating span.active {
-            animation: glow 1s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #ffd700, 0 0 20px #ffcc00;
-            }
-            to {
-                text-shadow: 0 0 20px #ffd700, 0 0 40px #ffcc00;
-            }
+        .star-rating .star:hover,
+        .star-rating .star.hovered {
+            color: #ffd700;
+            transform: scale(1.1);
         }
         .average-rating {
-            font-size: 1.5em;
+            font-size: 1.3em;
             color: #00ccff;
             text-shadow: 0 0 5px #00ccff;
         }
         .vote-count {
-            font-size: 1.2em;
+            font-size: 1em;
             color: #ccc;
         }
         .vote-message {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #3c3c3c;
+            margin-top: 5px;
+            padding: 8px;
+            background: rgba(60, 60, 60, 0.6);
             border-radius: 8px;
             color: #00ccff;
-            font-size: 1.1em;
+            font-size: 1em;
             text-shadow: 0 0 5px #00ccff;
             opacity: 0;
             transition: opacity 0.5s ease;
+            width: 100%;
+            text-align: center;
+            max-width: 600px;
         }
         .vote-message.show {
             opacity: 1;
         }
-        .review-form {
-            margin: 20px 0;
+        .review-section {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background-color: #2c2c2c;
+            width: 100%;
+            margin: 0;
+        }
+        .review-form {
+            min-width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: linear-gradient(145deg, #2c2c2a, #3a3a3a);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease;
-            box-sizing: border-box;
-            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 204, 255, 0.3), inset 0 0 10px rgba(0, 204, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid rgba(0, 204, 255, 0.4);
         }
         .review-form:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 204, 255, 0.5), inset 0 0 12px rgba(0, 204, 255, 0.2);
         }
         .review-form h3 {
             margin: 0;
             color: #ff3366;
             text-shadow: 0 0 5px #ff3366;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            text-align: center;
         }
         .review-form textarea {
             width: 100%;
             box-sizing: border-box;
             padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             background-color: #3c3c3c;
             color: #fff;
-            font-size: 1em;
+            font-size: 0.9em;
             resize: vertical;
-            transition: background-color 0.3s, box-shadow 0.3s;
+            min-height: 100px;
+            transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
+            border: 1px solid rgba(0, 204, 255, 0.3);
         }
         .review-form textarea:focus {
             background-color: #4c4c4c;
-            box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+            box-shadow: 0 0 12px rgba(0, 204, 255, 0.6);
+            border-color: #00ccff;
             outline: none;
         }
         .review-form button {
-            align-self: flex-start;
-            padding: 12px 25px;
+            align-self: center;
+            padding: 10px 25px;
             border: none;
             border-radius: 8px;
-            background-color: #ff3366;
+            background: linear-gradient(45deg, #ff3366, #cc0052);
             color: #fff;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         .review-form button:hover {
-            background-color: #cc0052;
+            background: linear-gradient(45deg, #cc0052, #ff3366);
             transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+            box-shadow: 0 0 12px rgba(255, 51, 102, 0.6);
         }
         .reviews {
-            margin-top: 20px;
-            max-width: 600px;
+            min-width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: linear-gradient(145deg, #222222, #2a2a2a);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 51, 102, 0.4);
+            box-shadow: 0 6px 15px rgba(255, 51, 102, 0.3), inset 0 0 10px rgba(255, 51, 102, 0.1);
         }
         .reviews h3 {
-            margin: 0 0 15px;
+            margin: 0 0 10px;
             color: #ff3366;
             text-shadow: 0 0 5px #ff3366;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            text-align: center;
         }
         .review {
-            background-color: #2c2c2c;
-            padding: 15px;
+            background: linear-gradient(145deg, #2c2c2a, #333333);
+            padding: 12px;
             border-radius: 10px;
-            margin-bottom: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
@@ -273,22 +353,65 @@
         }
         .review:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 15px rgba(0, 204, 255, 0.3);
+        }
+        .review.kermi {
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: kermi-glow 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes kermi-glow {
+            from {
+                box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            }
+            to {
+                box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+            }
         }
         .review p {
             margin: 0;
             color: #ddd;
             line-height: 1.6;
-            font-size: 1em;
+            font-size: 0.9em;
+        }
+        .review .username {
+            color: #ddd;
+            font-weight: bold;
+        }
+        .review .username.kermi {
+            color: #ff0000;
+        }
+        .review .delete-button {
+            margin-top: 8px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .review .delete-button:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
         }
         .review::before {
             content: '★';
             position: absolute;
-            top: 15px;
-            left: -25px;
+            top: 12px;
+            left: -20px;
             color: #ffd700;
-            font-size: 1.2em;
+            font-size: 1em;
             text-shadow: 0 0 5px #ffd700;
+        }
+        .no-reviews {
+            color: #ccc;
+            text-align: center;
+            font-style: italic;
+            padding: 15px;
+            background: rgba(60, 60, 60, 0.3);
+            border-radius: 8px;
         }
         .back-button {
             margin: 20px auto;
@@ -309,10 +432,55 @@
             transform: scale(1.05);
             box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
         }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
+        #registerModal, #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        #registerModal div, #loginModal div {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+        #registerModal h3, #loginModal h3 {
+            color: #ff3366;
+            text-shadow: 0 0 5px #ff3366;
+        }
+        #registerModal input, #loginModal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #3c3c3c;
+            color: #fff;
+        }
+        #registerModal button, #loginModal button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            margin: 5px;
+        }
+        #registerModal button:hover, #loginModal button:hover {
+            background: #cc0052;
+            transform: scale(1.05);
+        }
+        #registerMessage, #loginMessage {
+            color: #00ccff;
+            margin-top: 10px;
+        }
+        @media (max-width: 900px) {
             .movie-card {
                 flex-direction: column;
                 align-items: center;
@@ -320,18 +488,38 @@
             .movie-poster img {
                 max-width: 100%;
             }
-            .star-rating span {
+            .trailer-section iframe {
+                height: 300px;
+            }
+        }
+        @media (max-width: 600px) {
+            h1 {
                 font-size: 2em;
             }
+            .star-rating .star {
+                font-size: 1.5em;
+                width: 20px;
+            }
             .average-rating {
-                font-size: 1.2em;
+                font-size: 1.1em;
             }
             .vote-count {
-                font-size: 1em;
+                font-size: 0.9em;
             }
             .review-form, .reviews {
-                max-width: 100%;
                 padding: 15px;
+            }
+            .auth-buttons {
+                position: static;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .download-button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+            .review-form h3, .reviews h3 {
+                font-size: 1.2em;
             }
         }
     </style>
@@ -339,7 +527,32 @@
 <body>
     <header>
         <h1>PirateFlix</h1>
+        <div class="auth-buttons" id="authButtons"></div>
     </header>
+    <div id="registerModal">
+        <div>
+            <h3>Регистрация</h3>
+            <form id="registerForm">
+                <input type="text" id="regUsername" placeholder="Имя пользователя">
+                <input type="password" id="regPassword" placeholder="Пароль">
+                <button type="submit">Зарегистрироваться</button>
+                <button type="button" onclick="closeRegisterModal()">Закрыть</button>
+            </form>
+            <p id="registerMessage"></p>
+        </div>
+    </div>
+    <div id="loginModal">
+        <div>
+            <h3>Вход</h3>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Имя пользователя">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button type="submit">Войти</button>
+                <button type="button" onclick="closeLoginModal()">Закрыть</button>
+            </form>
+            <p id="loginMessage"></p>
+        </div>
+    </div>
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Поиск фильмов...">
         <button onclick="searchMovies()">Найти</button>
@@ -359,39 +572,75 @@
                 <p id="movieDescription"></p>
                 <div class="ratings" id="movieRatings"></div>
             </div>
-            <div id="videoSection">
-                <video id="movieVideo" controls>
-                    <source src="" type="video/mp4">
-                    Ваш браузер не поддерживает воспроизведение видео.
-                </video>
-            </div>
-            <div class="rating-section">
-                <div class="star-rating-container">
-                    <div class="star-rating" id="starRating">
-                        <span class="star" data-value="1">★</span>
-                        <span class="star" data-value="2">★</span>
-                        <span class="star" data-value="3">★</span>
-                        <span class="star" data-value="4">★</span>
-                        <span class="star" data-value="5">★</span>
+            <div id="videoSection" class="trailer-section">
+                <h3>Трейлер фильма</h3>
+                <iframe id="movieTrailer" 
+                        width="560" 
+                        height="315" 
+                        src="" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen>
+                </iframe>
+                <a href="file.mp4" download class="download-button">Скачать фильм</a>
+                <div class="user-interaction">
+                    <div class="rating-section">
+                        <div class="star-rating-container">
+                            <div class="star-rating" id="starRating">
+                                <span class="star" data-value="1">☆</span>
+                                <span class="star" data-value="2">☆</span>
+                                <span class="star" data-value="3">☆</span>
+                                <span class="star" data-value="4">☆</span>
+                                <span class="star" data-value="5">☆</span>
+                            </div>
+                            <div class="rating-info">
+                                <span class="average-rating"><span id="avgRating">0</span></span>
+                                <span class="vote-count">(<span id="voteCount">0</span> голосов)</span>
+                            </div>
+                        </div>
+                        <div class="vote-message" id="voteMessage"></div>
                     </div>
-                    <div class="rating-info">
-                        <span class="average-rating"><span id="avgRating">0</span></span>
-                        <span class="vote-count">(<span id="voteCount">0</span> голосов)</span>
+                    <div class="review-section">
+                        <div class="review-form">
+                            <h3>Оставить отзыв</h3>
+                            <textarea id="reviewText" rows="4" placeholder="Ваш отзыв..."></textarea>
+                            <button onclick="submitReview()">Отправить</button>
+                        </div>
+                        <div class="reviews" id="reviews">
+                            <h3>Отзывы</h3>
+                        </div>
                     </div>
-                </div>
-                <div class="vote-message" id="voteMessage"></div>
-                <div class="review-form">
-                    <h3>Оставить анонимный отзыв</h3>
-                    <textarea id="reviewText" rows="4" placeholder="Ваш отзыв (анонимно)..."></textarea>
-                    <button onclick="submitReview()">Отправить</button>
-                </div>
-                <div class="reviews" id="reviews">
-                    <h3>Анонимные отзывы</h3>
                 </div>
             </div>
         </div>
     </div>
     <script>
+        // Простая функция хеширования (небезопасная, для примера)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(16);
+        }
+
+        // Инициализация базы данных
+        function initDatabase() {
+            const db = localStorage.getItem('bd.baza');
+            if (!db) {
+                const initialDb = {
+                    users: [],
+                    reviews: {},
+                    ratings: {}
+                };
+                localStorage.setItem('bd.baza', JSON.stringify(initialDb));
+            }
+        }
+
         const movies = {
             1: {
                 title: "Раша Гудбай (2025)",
@@ -401,7 +650,8 @@
                 studio: "Квартал 95",
                 premiere: "27 марта 2025",
                 description: "Фильм рассказывает о Рите, жительнице Горловки, которая более 10 лет жила на оккупированной территории, поддерживая оккупантов и работая телеведущей, пропагандирующей ложные идеи об Украине. Из-за наступления Российского добровольческого корпуса она с сыном пытается эвакуироваться в Россию, но оказывается в Ужгороде. Там реальность переворачивает ее мировоззрение. Сможет ли она бросить вызов своим убеждениям?",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                youtubeId: "vF2Sgm3h0qk",
+                downloadLink: "https://www.dropbox.com/scl/fi/canuaql4brgzo0h8cdahn/rashagudbai.mp4?rlkey=2fqihz94b2m0lyz1zvit0qvyf&st=uliga0gw&dl=1",
                 ratings: [
                     { source: "Kinobaza.com.ua", text: "Пока нет числовых рейтингов. Комментарий: «Гілляка тобі в сраку! Ми подивилися новий кварталівський фільм — і нам відібрало мову»." },
                     { source: "Filmix.my", text: "Спорный отзыв: «Фильм — однобокая провокация одной правды, разжигающая ненависть»." },
@@ -409,46 +659,56 @@
                 ]
             },
             2: {
-                title: "Два холма (2024)",
-                poster: "https://kinobar.net/uploads/posts/2025-05/1746125136-1843853791.webp",
-                genres: "Комедия, Фантастика",
-                director: "Дмитрий Грибанов",
-                studio: "START Studio",
-                premiere: "15 мая 2024",
-                description: "В будущем женщины создали идеальный город без мужчин. Учительница Рада живёт в этом городе, пока туда случайно не попадает мужчина, нарушая привычный порядок. Смешная и провокационная комедия о столкновении миров.",
-                seasons: {
-                    1: Array.from({ length: 14 }, (_, i) => ({
-                        episode: i + 1,
-                        video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                    })),
-                    2: Array.from({ length: 14 }, (_, i) => ({
-                        episode: i + 1,
-                        video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                    })),
-                    3: Array.from({ length: 4 }, (_, i) => ({
-                        episode: i + 1,
-                        video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                    }))
-                },
-                ratings: []
+                title: "Снайпер. Белый ворон (2022)",
+                poster: "https://upload.wikimedia.org/wikipedia/commons/1/15/WhiteRavenUkr.png",
+                genres: "Боевик, Драма, Военный",
+                director: "Мариан Бушан",
+                studio: "UM Group",
+                premiere: "24 мая 2022",
+                description: "История украинского снайпера, который после личной трагедии становится добровольцем и вступает в борьбу с врагом. Фильм основан на реальных событиях и рассказывает о мужестве, мести и человеческой стойкости на фоне войны.",
+                youtubeId: "VptIeP_TpTU",
+                downloadLink: "https://www.dropbox.com/scl/fi/yhqwrv86uzmyqgme2wnah/beliyvoron720.mp4?rlkey=c74jx3yktncvmp0jbl2xby9hh&st=2h10nic6&dl=1",
+                ratings: [
+                    { source: "Kinowar.com", text: "Оценка 7/10: «Эмоционально сильный фильм, который показывает войну без прикрас»." },
+                    { source: "IMDb", text: "Рейтинг 6.4/10: «Сильная актерская игра, но сюжет местами предсказуем»." }
+                ]
             },
-            3: {
-                title: "Любовь под звездами (2023)",
-                poster: "https://via.placeholder.com/250x375.png?text=Фильм+3",
-                genres: "Романтика, Драма",
-                director: "Анна Петрова",
-                studio: "Романтик Филмс",
-                premiere: "10 февраля 2023",
-                description: "История любви, которая меняет жизни двух людей под ночным небом.",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                ratings: []
-            }
+            5: {
+                    title: "Киборги (2017)",
+                    poster: "https://upload.wikimedia.org/wikipedia/uk/thumb/8/8f/Kiborhy_%28Ukr_poster_-1%2C_2017%29.jpg/250px-Kiborhy_%28Ukr_poster_-1%2C_2017%29.jpg",
+                    genres: "Военный, Драма, Боевик",
+                    director: "Ахтем Сеитаблаев",
+                    studio: "Ідас Філм",
+                    premiere: "7 декабря 2017",
+                    description: "Фильм рассказывает о двухнедельном боевом дежурстве украинских военных в Донецком аэропорту в сентябре 2014 года. Группа добровольцев, несмотря на различия в происхождении и возрасте, объединяется для защиты родной земли от агрессора. Лента основана на реальных событиях и подчеркивает героизм защитников, прозванных 'киборгами'.",
+                    youtubeId: "Pz6wWUoiiyI",
+                    downloadLink: "https://www.dropbox.com/scl/fi/75tsk95mtpl1wawrq49y4/Kiborgi2017720.mp4?rlkey=p9bu8g6m5b787dsehmvk987hx&st=ozhom0xa&dl=1",
+                    ratings: [
+                        { source: "IMDb", text: "Рейтинг 7.9/10: «Сильная драма о героизме и стойкости украинских военных»." },
+                        { source: "Киноафиша", text: "Оценка 8.2/10: «Фильм, который должен посмотреть каждый»." }
+                    ]
+                },
+             4: {
+                    title: "Донбасс (2018)",
+                    poster: "https://upload.wikimedia.org/wikipedia/ru/thumb/e/ec/%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%94%D0%BE%D0%BD%D0%B1%D0%B0%D1%81%D1%81%2C_2018.jpg/640px-%D0%9F%D0%BE%D1%81%D1%82%D0%B5%D1%80_%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%B0_%D0%94%D0%BE%D0%BD%D0%B1%D0%B0%D1%81%D1%81%2C_2018.jpg",
+                    genres: "Военная драма",
+                    director: "Сергей Лозница",
+                    studio: "Arthouse Traffic, Atoms & Void, Graniet Film BV, JBA Productions, Ma.ja.de. Fiction, Ukrainian State Film Agency, Wild at Art",
+                    premiere: "9 мая 2018",
+                    description: "Фильм 'Донбасс' — это военная драма, состоящая из 13 эпизодов, которые перетекают друг в друга, воссоздавая реальные события на востоке Украины. Основанный на любительских видеороликах с YouTube, снятых обеими сторонами конфликта, фильм показывает абсурд и трагедию войны, размытие границ между правдой и пропагандой, а также жизнь людей в условиях оккупации. Картина подчеркивает антивоенный посыл, не оправдывая насилие ни с одной из сторон.",
+                    youtubeId: "mu0g4G3B2jg",
+                    downloadLink: "https://mega.nz/file/iQkl1IBS#9ceoOEoY4pOhTMpZUB1PO72DOIa7Dp1LhRsYdZagrT4",
+                    ratings: [
+                        { source: "IMDb", text: "Рейтинг 6.6/10: «Пронзительный взгляд на абсурд и трагедию войны на востоке Украины»." },
+                        { source: "КиноПоиск", text: "Оценка 6.4/10: «Неоднозначная картина, вызывающая споры, но заставляющая задуматься»." }
+                    ]
+                }
+
         };
 
-        function loadMovie() {
+        async function loadMovie() {
             const urlParams = new URLSearchParams(window.location.search);
             let movieId = urlParams.get('id') || '1';
-
             const movie = movies[movieId];
             if (!movie) {
                 document.getElementById('movieCard').innerHTML = '<p>Фильм не найден!</p>';
@@ -464,32 +724,12 @@
             document.getElementById('moviePremiere').innerHTML = `<strong>Премьера:</strong> ${movie.premiere}`;
             document.getElementById('movieDescription').innerHTML = `<strong>Описание:</strong> ${movie.description}`;
 
-            const videoSection = document.getElementById('videoSection');
-            if (movieId === '2' && movie.seasons) {
-                videoSection.innerHTML = `
-                    <div class="season-episode-selector">
-                        <select id="seasonSelect" onchange="updateEpisodes()">
-                            <option value="1">Сезон 1</option>
-                            <option value="2">Сезон 2</option>
-                            <option value="3">Сезон 3</option>
-                        </select>
-                        <select id="episodeSelect" onchange="playEpisode()"></select>
-                    </div>
-                    <video id="movieVideo" controls>
-                        <source src="" type="video/mp4">
-                        Ваш браузер не поддерживает воспроизведение видео.
-                    </video>
-                `;
-                updateEpisodes();
-            } else {
-                videoSection.innerHTML = `
-                    <video id="movieVideo" controls>
-                        <source src="${movie.video}" type="video/mp4">
-                        Ваш браузер не поддерживает воспроизведение видео.
-                    </video>
-                `;
-                document.getElementById('movieVideo').load();
-            }
+            const trailerIframe = document.getElementById('movieTrailer');
+            trailerIframe.src = `https://www.youtube.com/embed/${movie.youtubeId}`;
+            trailerIframe.title = `Трейлер ${movie.title}`;
+
+            const downloadButton = document.querySelector('.download-button');
+            downloadButton.href = movie.downloadLink;
 
             const ratingsContainer = document.getElementById('movieRatings');
             ratingsContainer.innerHTML = '<h3>Оценки и отзывы:</h3>';
@@ -504,61 +744,62 @@
             }
 
             updateAverageRating(movieId);
-            const storedRatings = JSON.parse(localStorage.getItem(`ratings_${movieId}`)) || [];
-            if (storedRatings.length) {
-                updateStars(storedRatings[storedRatings.length - 1]);
-            } else {
-                updateStars(0);
-            }
             displayReviews(movieId);
-        }
-
-        function updateEpisodes() {
-            const seasonSelect = document.getElementById('seasonSelect');
-            const episodeSelect = document.getElementById('episodeSelect');
-            const season = seasonSelect.value;
-            const episodes = movies['2'].seasons[season];
-            episodeSelect.innerHTML = episodes.map(ep => `<option value="${ep.episode}">Серия ${ep.episode}</option>`).join('');
-            playEpisode();
-        }
-
-        function playEpisode() {
-            const seasonSelect = document.getElementById('seasonSelect');
-            const episodeSelect = document.getElementById('episodeSelect');
-            const season = seasonSelect.value;
-            const episode = episodeSelect.value;
-            const video = document.getElementById('movieVideo');
-            const episodeData = movies['2'].seasons[season].find(ep => ep.episode == episode);
-            video.querySelector('source').src = episodeData.video;
-            video.load();
         }
 
         function searchMovies() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             if (query.includes('раша гудбай') || query.includes('rusha goodbye')) {
                 window.location.href = 'site.html?id=1';
-            } else if (query.includes('два холма')) {
+            } else if (query.includes('снайпер') || query.includes('белый ворон') || query.includes('sniper')) {
                 window.location.href = 'site.html?id=2';
             } else {
-                alert('Фильм не найден! Попробуйте "Раша Гудбай" или "Два холма"');
+                alert('Фильм не найден! Попробуйте "Раша Гудбай" или "Снайпер. Белый ворон"');
             }
         }
 
         const stars = document.querySelectorAll('.star');
-        const starRating = document.getElementById('starRating');
         const voteMessage = document.getElementById('voteMessage');
+        let currentUserRating = null;
 
         function updateAverageRating(movieId) {
-            const ratings = JSON.parse(localStorage.getItem(`ratings_${movieId}`)) || [];
-            const avgRating = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : 0;
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { ratings: {} };
+            const ratings = db.ratings[movieId] || [];
+            const avgRating = ratings.length ? (ratings.reduce((a, b) => a + b.rating, 0) / ratings.length).toFixed(1) : 0;
             document.getElementById('avgRating').textContent = avgRating;
             document.getElementById('voteCount').textContent = ratings.length;
+
+            const user = localStorage.getItem('loggedInUser');
+            if (user) {
+                const userRating = ratings.find(r => r.username === user);
+                currentUserRating = userRating ? userRating.rating : null;
+            }
+            updateStars(currentUserRating || Math.round(avgRating));
         }
 
         function updateStars(rating) {
             stars.forEach(star => {
                 const starValue = parseInt(star.dataset.value);
-                star.classList.toggle('active', starValue <= rating);
+                if (starValue <= rating) {
+                    star.classList.add('filled');
+                    star.textContent = '★';
+                } else {
+                    star.classList.remove('filled');
+                    star.textContent = '☆';
+                }
+            });
+        }
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starValue = parseInt(star.dataset.value);
+                if (starValue <= rating) {
+                    star.classList.add('hovered');
+                    star.textContent = '★';
+                } else {
+                    star.classList.remove('hovered');
+                    star.textContent = '☆';
+                }
             });
         }
 
@@ -572,14 +813,26 @@
 
         stars.forEach(star => {
             star.addEventListener('click', () => {
+                const user = localStorage.getItem('loggedInUser');
+                if (!user) {
+                    alert('Пожалуйста, войдите в систему, чтобы оставить оценку!');
+                    return;
+                }
                 const urlParams = new URLSearchParams(window.location.search);
                 let movieId = urlParams.get('id') || '1';
                 if (!movieId) return;
 
                 const rating = parseInt(star.dataset.value);
-                const ratings = JSON.parse(localStorage.getItem(`ratings_${movieId}`)) || [];
-                ratings.push(rating);
-                localStorage.setItem(`ratings_${movieId}`, JSON.stringify(ratings));
+                const db = JSON.parse(localStorage.getItem('bd.baza')) || { ratings: {} };
+                if (!db.ratings[movieId]) db.ratings[movieId] = [];
+                const existingRating = db.ratings[movieId].find(r => r.username === user);
+                if (existingRating) {
+                    existingRating.rating = rating;
+                } else {
+                    db.ratings[movieId].push({ username: user, rating });
+                }
+                localStorage.setItem('bd.baza', JSON.stringify(db));
+                currentUserRating = rating;
                 updateStars(rating);
                 updateAverageRating(movieId);
                 showVoteMessage(rating);
@@ -587,33 +840,35 @@
 
             star.addEventListener('mouseover', () => {
                 const rating = parseInt(star.dataset.value);
-                stars.forEach(s => {
-                    const starValue = parseInt(s.dataset.value);
-                    s.classList.toggle('active', starValue <= rating);
-                });
+                highlightStars(rating);
             });
 
             star.addEventListener('mouseout', () => {
-                stars.forEach(s => s.classList.remove('active'));
                 const urlParams = new URLSearchParams(window.location.search);
                 let movieId = urlParams.get('id') || '1';
-                const ratings = JSON.parse(localStorage.getItem(`ratings_${movieId}`)) || [];
-                if (ratings.length) {
-                    updateStars(ratings[ratings.length - 1]);
-                }
+                const db = JSON.parse(localStorage.getItem('bd.baza')) || { ratings: {} };
+                const ratings = db.ratings[movieId] || [];
+                const avgRating = ratings.length ? Math.round(ratings.reduce((a, b) => a + b.rating, 0) / ratings.length) : 0;
+                updateStars(currentUserRating || avgRating);
             });
         });
 
         function submitReview() {
+            const user = localStorage.getItem('loggedInUser');
+            if (!user) {
+                alert('Пожалуйста, войдите в систему, чтобы оставить отзыв!');
+                return;
+            }
             const urlParams = new URLSearchParams(window.location.search);
             let movieId = urlParams.get('id') || '1';
             if (!movieId) return;
 
             const reviewText = document.getElementById('reviewText').value.trim();
             if (reviewText) {
-                const reviews = JSON.parse(localStorage.getItem(`reviews_${movieId}`)) || [];
-                reviews.push(reviewText);
-                localStorage.setItem(`reviews_${movieId}`, JSON.stringify(reviews));
+                const db = JSON.parse(localStorage.getItem('bd.baza')) || { reviews: {} };
+                if (!db.reviews[movieId]) db.reviews[movieId] = [];
+                db.reviews[movieId].push({ username: user, text: reviewText });
+                localStorage.setItem('bd.baza', JSON.stringify(db));
                 document.getElementById('reviewText').value = '';
                 displayReviews(movieId);
             } else {
@@ -621,28 +876,168 @@
             }
         }
 
+        function deleteReview(movieId, reviewIndex) {
+            const user = localStorage.getItem('loggedInUser');
+            if (!user) {
+                alert('Пожалуйста, войдите в систему, чтобы удалить отзыв!');
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { reviews: {} };
+            const reviews = db.reviews[movieId] || [];
+            const review = reviews[reviewIndex];
+
+            if (!review) {
+                alert('Отзыв не найден!');
+                return;
+            }
+
+            if (user === 'Kermi' || review.username === user) {
+                reviews.splice(reviewIndex, 1);
+                db.reviews[movieId] = reviews;
+                localStorage.setItem('bd.baza', JSON.stringify(db));
+                displayReviews(movieId);
+            } else {
+                alert('Вы можете удалять только свои отзывы!');
+            }
+        }
+
         function displayReviews(movieId) {
-            const reviews = JSON.parse(localStorage.getItem(`reviews_${movieId}`)) || [];
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { reviews: {} };
+            const reviews = db.reviews[movieId] || [];
             const reviewsContainer = document.getElementById('reviews');
-            reviewsContainer.innerHTML = '<h3>Анонимные отзывы</h3>';
+            const currentUser = localStorage.getItem('loggedInUser');
+            reviewsContainer.innerHTML = '<h3>Отзывы</h3>';
             if (reviews.length === 0) {
                 const noReviews = document.createElement('p');
+                noReviews.className = 'no-reviews';
                 noReviews.textContent = 'Пока нет отзывов. Будьте первым!';
-                noReviews.style.color = '#ccc';
                 reviewsContainer.appendChild(noReviews);
             } else {
-                reviews.forEach(review => {
+                reviews.forEach((review, index) => {
                     const reviewElement = document.createElement('div');
                     reviewElement.className = 'review';
+                    if (review.username === 'Kermi') {
+                        reviewElement.className += ' kermi';
+                    }
                     const reviewText = document.createElement('p');
-                    reviewText.textContent = review;
+                    const usernameSpan = document.createElement('span');
+                    usernameSpan.textContent = review.username;
+                    usernameSpan.className = 'username';
+                    if (review.username === 'Kermi') {
+                        usernameSpan.className += ' kermi';
+                    }
+                    reviewText.appendChild(usernameSpan);
+                    reviewText.appendChild(document.createTextNode(`: ${review.text}`));
                     reviewElement.appendChild(reviewText);
+
+                    if (currentUser && (currentUser === review.username || currentUser === 'Kermi')) {
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete-button';
+                        deleteButton.textContent = 'Удалить';
+                        deleteButton.onclick = () => deleteReview(movieId, index);
+                        reviewElement.appendChild(deleteButton);
+                    }
+
                     reviewsContainer.appendChild(reviewElement);
                 });
             }
         }
 
-        loadMovie();
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+            document.getElementById('registerMessage').textContent = '';
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginMessage').textContent = '';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            
+            if (!username || !password) {
+                document.getElementById('registerMessage').textContent = 'Заполните все поля!';
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            if (db.users.find(user => user.username === username)) {
+                document.getElementById('registerMessage').textContent = 'Пользователь уже существует!';
+                return;
+            }
+
+            db.users.push({ username, password: simpleHash(password) });
+            localStorage.setItem('bd.baza', JSON.stringify(db));
+            document.getElementById('registerMessage').textContent = 'Регистрация успешна!';
+            setTimeout(closeRegisterModal, 1000);
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username || !password) {
+                document.getElementById('loginMessage').textContent = 'Заполните все поля!';
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            const user = db.users.find(user => user.username === username && user.password === simpleHash(password));
+
+            if (!user) {
+                document.getElementById('loginMessage').textContent = 'Неверное имя пользователя или пароль!';
+                return;
+            }
+
+            localStorage.setItem('loggedInUser', username);
+            updateAuthButtons();
+            document.getElementById('loginMessage').textContent = 'Вход успешен!';
+            setTimeout(closeLoginModal, 1000);
+        });
+
+        function updateAuthButtons() {
+            const user = localStorage.getItem('loggedInUser');
+            const authButtons = document.getElementById('authButtons');
+            if (user) {
+                authButtons.innerHTML = `
+                    <a href="profile.html" class="username">Привет, ${user}!</a>
+                    <button onclick="logout()">Выйти</button>
+                `;
+            } else {
+                authButtons.innerHTML = `
+                    <button onclick="showRegisterModal()">Регистрация</button>
+                    <button onclick="showLoginModal()">Вход</button>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            updateAuthButtons();
+        }
+
+        window.addEventListener('load', () => {
+            initDatabase();
+            updateAuthButtons();
+            loadMovie();
+        });
     </script>
 </body>
 </html>

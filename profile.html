@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PirateFlix - Личный кабинет</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(90deg, #ff0066, #00ccff);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+        h1 {
+            margin: 0;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .auth-buttons a, .auth-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s;
+            text-decoration: none;
+        }
+        .auth-buttons a.username {
+            background-color: #00ccff;
+        }
+        .auth-buttons button:hover, .auth-buttons a:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            color: #00ccff;
+            text-shadow: 0 0 5px #00ccff;
+            font-size: 1.8em;
+            margin: 0 0 20px;
+        }
+        .profile-section {
+            margin-bottom: 20px;
+        }
+        .profile-section h3 {
+            color: #ff3366;
+            text-shadow: 0 0 5px #ff3366;
+            font-size: 1.5em;
+            margin: 0 0 15px;
+        }
+        .profile-section input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #3c3c3c;
+            color: #fff;
+            font-size: 1em;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .profile-section input:focus {
+            background-color: #4c4c4c;
+            box-shadow: 0 0 10px #00ccff;
+            outline: none;
+        }
+        .profile-section button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .profile-section button:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+        .profile-section .message {
+            color: #00ccff;
+            margin-top: 10px;
+            font-size: 1em;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .profile-section .message.show {
+            opacity: 1;
+        }
+        .admin-section {
+            display: none;
+        }
+        .admin-section.show {
+            display: block;
+        }
+        .admin-section button, .admin-section input[type="file"] {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            margin: 10px 0;
+        }
+        .admin-section button:hover, .admin-section input[type="file"]:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+        .back-button {
+            margin: 20px auto;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #cc0052;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+        #registerModal, #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        #registerModal div, #loginModal div {
+            background: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+        #registerModal h3, #loginModal h3 {
+            color: #ff3366;
+            text-shadow: 0 0 5px #ff3366;
+        }
+        #registerModal input, #loginModal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #3c3c3c;
+            color: #fff;
+        }
+        #registerModal button, #loginModal button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #ff3366;
+            color: #fff;
+            cursor: pointer;
+            margin: 5px;
+        }
+        #registerModal button:hover, #loginModal button:hover {
+            background: #cc0052;
+            transform: scale(1.05);
+        }
+        #registerMessage, #loginMessage {
+            color: #00ccff;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            .profile-section h3 {
+                font-size: 1.2em;
+            }
+            .auth-buttons {
+                position: static;
+                justify-content: center;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PirateFlix</h1>
+        <div class="auth-buttons" id="authButtons"></div>
+    </header>
+    <div id="registerModal">
+        <div>
+            <h3>Регистрация</h3>
+            <form id="registerForm">
+                <input type="text" id="regUsername" placeholder="Имя пользователя">
+                <input type="password" id="regPassword" placeholder="Пароль">
+                <button type="submit">Зарегистрироваться</button>
+                <button type="button" onclick="closeRegisterModal()">Закрыть</button>
+            </form>
+            <p id="registerMessage"></p>
+        </div>
+    </div>
+    <div id="loginModal">
+        <div>
+            <h3>Вход</h3>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Имя пользователя">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button type="submit">Войти</button>
+                <button type="button" onclick="closeLoginModal()">Закрыть</button>
+            </form>
+            <p id="loginMessage"></p>
+        </div>
+    </div>
+    <a href="home.html" class="back-button">Назад к фильмам</a>
+    <div class="container">
+        <h2>Личный кабинет</h2>
+        <div class="profile-section">
+            <h3>Изменить логин</h3>
+            <input type="text" id="newUsername" placeholder="Новый логин">
+            <button onclick="changeUsername()">Изменить</button>
+            <p class="message usernameMessage"></p>
+        </div>
+        <div class="profile-section">
+            <h3>Изменить пароль</h3>
+            <input type="password" id="currentPassword" placeholder="Текущий пароль">
+            <input type="password" id="newPassword" placeholder="Новый пароль">
+            <button onclick="changePassword()">Изменить</button>
+            <p class="message passwordMessage"></p>
+        </div>
+        <div class="admin-section" id="adminPanel">
+            <h3>Администрирование (Kermi)</h3>
+            <button onclick="downloadDatabase()">Скачать базу данных</button>
+            <input type="file" id="uploadDatabase" accept=".json">
+            <button onclick="uploadDatabase()">Загрузить базу данных</button>
+            <p class="message adminMessage"></p>
+        </div>
+    </div>
+    <script>
+        // Простая функция хеширования (небезопасная, для примера)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(16);
+        }
+
+        // Показать сообщение
+        function showMessage(elementClass, message) {
+            const messageElement = document.querySelector(`.${elementClass}`);
+            messageElement.textContent = message;
+            messageElement.classList.add('show');
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+                messageElement.textContent = '';
+            }, 3000);
+        }
+
+        // Инициализация базы данных
+        function initDatabase() {
+            const db = localStorage.getItem('bd.baza');
+            if (!db) {
+                const initialDb = {
+                    users: [],
+                    reviews: {},
+                    ratings: {}
+                };
+                localStorage.setItem('bd.baza', JSON.stringify(initialDb));
+            }
+        }
+
+        // Обновление кнопок авторизации
+        function updateAuthButtons() {
+            const user = localStorage.getItem('loggedInUser');
+            const authButtons = document.getElementById('authButtons');
+            if (user) {
+                authButtons.innerHTML = `
+                    <a href="profile.html" class="username">Привет, ${user}!</a>
+                    <button onclick="logout()">Выйти</button>
+                `;
+                // Показываем админ-панель, если пользователь - Kermi
+                if (user === 'Kermi') {
+                    document.getElementById('adminPanel').classList.add('show');
+                }
+            } else {
+                authButtons.innerHTML = `
+                    <button onclick="showRegisterModal()">Регистрация</button>
+                    <button onclick="showLoginModal()">Вход</button>
+                `;
+            }
+        }
+
+        // Выход из аккаунта
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            updateAuthButtons();
+            document.getElementById('adminPanel').classList.remove('show');
+        }
+
+        // Модальные окна
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+            document.getElementById('registerMessage').textContent = '';
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginMessage').textContent = '';
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        // Обработка регистрации
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            
+            if (!username || !password) {
+                document.getElementById('registerMessage').textContent = 'Заполните все поля!';
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            if (db.users.find(user => user.username === username)) {
+                document.getElementById('registerMessage').textContent = 'Пользователь уже существует!';
+                return;
+            }
+
+            db.users.push({ username, password: simpleHash(password) });
+            localStorage.setItem('bd.baza', JSON.stringify(db));
+            document.getElementById('registerMessage').textContent = 'Регистрация успешна!';
+            setTimeout(closeRegisterModal, 1000);
+        });
+
+        // Обработка входа
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username || !password) {
+                document.getElementById('loginMessage').textContent = 'Заполните все поля!';
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            const user = db.users.find(user => user.username === username && user.password === simpleHash(password));
+
+            if (!user) {
+                document.getElementById('loginMessage').textContent = 'Неверное имя пользователя или пароль!';
+                return;
+            }
+
+            localStorage.setItem('loggedInUser', username) //changed from JSON.stringify to a string
+            updateAuthButtons();
+            document.getElementById('loginMessage').textContent = 'Вход успешен!';
+            setTimeout(closeLoginModal, 1000);
+        });
+
+        // Смена логина
+        function changeUsername() {
+            const newUsername = document.getElementById('newUsername').value.trim();
+            const user = localStorage.getItem('loggedInUser');
+
+            if (!user) {
+                showMessage('usernameMessage', 'Вы не авторизованы!');
+                return;
+            }
+
+            if (!newUsername || newUsername.length < 3) {
+                showMessage('usernameMessage', 'Логин должен быть длиннее 2 символов!');
+                return;
+            }
+
+            // Проверяем, не занят ли новый логин
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            if (db.users.find(u => u.username === newUsername)) {
+                showMessage('usernameMessage', 'Этот логин уже занят!');
+                return;
+            }
+
+            // Обновляем логин в localStorage
+            const userIndex = db.users.findIndex(u => u.username === user);
+            if (userIndex !== -1) {
+                db.users[userIndex].username = newUsername;
+                localStorage.setItem('bd.baza', JSON.stringify(db));
+                localStorage.setItem('loggedInUser', newUsername);
+            }
+            showMessage('usernameMessage', 'Логин успешно изменен!');
+            updateAuthButtons();
+        }
+
+        // Смена пароля
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const user = localStorage.getItem('loggedInUser');
+
+            if (!user) {
+                showMessage('passwordMessage', 'Вы не авторизованы!');
+                return;
+            }
+
+            if (!currentPassword || !newPassword) {
+                showMessage('passwordMessage', 'Заполните все поля!');
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || { users: [] };
+            const userData = db.users.find(u => u.username === user);
+            if (!userData || simpleHash(currentPassword) !== userData.password) {
+                showMessage('passwordMessage', 'Текущий пароль неверный!');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showMessage('passwordMessage', 'Новый пароль должен быть длиннее 5 символов!');
+                return;
+            }
+
+            userData.password = simpleHash(newPassword);
+            localStorage.setItem('bd.baza', JSON.stringify(db));
+            showMessage('passwordMessage', 'Пароль успешно изменен!');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+        }
+
+        // Скачивание базы данных
+        function downloadDatabase() {
+            const user = localStorage.getItem('loggedInUser');
+            if (!user || user !== 'Kermi') {
+                showMessage('adminMessage', 'Доступ запрещен!');
+                return;
+            }
+
+            const db = JSON.parse(localStorage.getItem('bd.baza')) || {
+                users: [],
+                reviews: {},
+                ratings: {}
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute('href', dataStr);
+            downloadAnchor.setAttribute('download', 'bd.baza.json');
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+            showMessage('adminMessage', 'База данных скачана!');
+        }
+
+        // Загрузка базы данных
+        function uploadDatabase() {
+            const user = localStorage.getItem('loggedInUser');
+            if (!user || user !== 'Kermi') {
+                showMessage('adminMessage', 'Доступ запрещен!');
+                return;
+            }
+
+            const fileInput = document.getElementById('uploadDatabase');
+            const file = fileInput.files[0];
+            if (!file) {
+                showMessage('adminMessage', 'Выберите файл!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    // Проверка структуры базы данных
+                    if (!data.users || !data.reviews || !data.ratings) {
+                        showMessage('adminMessage', 'Неверный формат файла!');
+                        return;
+                    }
+                    localStorage.setItem('bd.baza', JSON.stringify(data));
+                    showMessage('adminMessage', 'База данных успешно загружена!');
+                    fileInput.value = ''; // Очистка поля ввода файла
+                } catch (error) {
+                    showMessage('adminMessage', 'Ошибка загрузки файла!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            initDatabase();
+            updateAuthButtons();
+        };
+    </script>
+</body>
+</html>
